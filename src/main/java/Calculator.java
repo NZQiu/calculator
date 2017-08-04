@@ -12,12 +12,6 @@ public class Calculator {
     private static Calculator instance;
 
     private static final String UNDO_COMMAND = "undo";
-    private static final String ADD_COMMAND = "+";
-    private static final String SUB_COMMAND = "-";
-    private static final String MUL_COMMAND = "*";
-    private static final String DIV_COMMAND = "/";
-    private static final String SQRT_COMMAND = "sqrt";
-    private static final String CLEAR_COMMAND = "clear";
 
     private final Map<String, Command> commandMap;
     private final Set<String> allowedCommandSet;
@@ -31,17 +25,18 @@ public class Calculator {
 
         // Can be injected
         commandMap = new HashMap<String, Command>();
-        commandMap.put(ADD_COMMAND, new AddCommand());
-        commandMap.put(SUB_COMMAND, new SubCommand());
-        commandMap.put(MUL_COMMAND, new MulCommand());
-        commandMap.put(DIV_COMMAND, new DivCommand());
-        commandMap.put(SQRT_COMMAND, new SqrtCommand());
-        commandMap.put(CLEAR_COMMAND, new ClearCommand());
+        commandMap.put("+", new AddCommand());
+        commandMap.put("-", new SubCommand());
+        commandMap.put("*", new MulCommand());
+        commandMap.put("/", new DivCommand());
+        commandMap.put("sqrt", new SqrtCommand());
+        commandMap.put("clear", new ClearCommand());
 
         dataStack = new Stack<Integer>();
         commandStack = new Stack<Command>();
 
         allowedCommandSet = commandMap.keySet();
+        allowedCommandSet.add(UNDO_COMMAND);
     }
 
     public static Calculator getInstance() {
