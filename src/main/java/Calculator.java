@@ -14,7 +14,7 @@ public class Calculator {
     private static final String UNDO_COMMAND = "undo";
 
     private final Map<String, Command> commandMap;
-    private final Set<String> allowedCommandSet;
+    private final Set<String> allowedOperatorSet;
 
     private State curState;
     private Stack<Integer> dataStack;
@@ -22,21 +22,12 @@ public class Calculator {
 
     private Calculator() {
         curState = State.NORMAL;
-
-        // Can be injected
         commandMap = new HashMap<String, Command>();
-        commandMap.put("+", new AddCommand());
-        commandMap.put("-", new SubCommand());
-        commandMap.put("*", new MulCommand());
-        commandMap.put("/", new DivCommand());
-        commandMap.put("sqrt", new SqrtCommand());
-        commandMap.put("clear", new ClearCommand());
-
         dataStack = new Stack<Integer>();
         commandStack = new Stack<Command>();
 
-        allowedCommandSet = commandMap.keySet();
-        allowedCommandSet.add(UNDO_COMMAND);
+        allowedOperatorSet = new HashSet<String>();
+        allowedOperatorSet.add(UNDO_COMMAND);
     }
 
     public static Calculator getInstance() {
@@ -48,6 +39,23 @@ public class Calculator {
             }
         }
         return instance;
+    }
+
+    // Inject allowed command
+    public void setAllowedCommand(List<Command> commands) {
+        if (null == commands) return;
+
+        String operator;
+        for (Command command : commands) {
+            if (null == command) continue;
+
+            operator = command.getOperator();
+            if (null == operator)  return;
+            if (operator.length() == 0) return;
+
+            allowedOperatorSet.add(operator);
+            commandMap.put(operator, command);
+        }
     }
 
     public void push(String input) {
@@ -96,7 +104,7 @@ public class Calculator {
     }
 
     private boolean isOperator(String input) {
-        return allowedCommandSet.contains(input);
+        return allowedOperatorSet.contains(input);
     }
 
     private void printStack() {

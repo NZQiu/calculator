@@ -4,6 +4,10 @@ import java.util.Stack;
 
 public class ClearCommand extends Command {
 
+    public String getOperator() {
+        return "clear";
+    }
+
     protected int execute() {
         return 0;
     }

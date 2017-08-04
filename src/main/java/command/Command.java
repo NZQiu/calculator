@@ -6,6 +6,8 @@ public abstract class Command {
 
     Stack<Integer> dataStack;
 
+    public abstract String getOperator();
+
     protected abstract int execute();
 
     public abstract boolean isValidate();
